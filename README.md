@@ -4,20 +4,21 @@
 Harmony OS network 鸿蒙网络库
 
 #### 软件架构
-软件架构说明
+系统封装后简介网络请求库，http，websocket。
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+`ohpm install @free/network`
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1、初始化
+```
+dio.get("https://www.baidu.com");
+
+dio.post("https://www.baidu.com");
+```
 
 #### 参与贡献
 
