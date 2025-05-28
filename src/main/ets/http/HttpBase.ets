@@ -181,12 +181,15 @@ export class HttpBase implements HttpFace,HttpConfigFace,HttpListener{
   readTimeout: number = 6000
   httpRequest: http.HttpRequest = http.createHttp()
   changeResp: ((resp:http.HttpResponse)=>http.HttpResponse) | undefined;
+  baseOptions:http.HttpRequestOptions = {
+    connectTimeout: this.connectTimeout,
+    method: this.method,
+    readTimeout: this.readTimeout
+  }
 
-  request<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions | undefined = {}): Promise<HttpResp<T>> {
+  request<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions = this.baseOptions): Promise<HttpResp<T>> {
     this.baseHeader.set("Content-Type",this.contentType);
     options.header = assign({},this.baseHeader,options.header??{})
-    options.connectTimeout = this.connectTimeout;
-    options.readTimeout = this.readTimeout
     return new Promise((res,rej)=>{
       this.httpRequest.request(url,options,(err,data)=>{
         if (err) {
@@ -208,37 +211,37 @@ export class HttpBase implements HttpFace,HttpConfigFace,HttpListener{
     });
   }
 
-  get<T>(url:string,options:http.HttpRequestOptions = {}): Promise<HttpResp<T>> {
+  get<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions = this.baseOptions): Promise<HttpResp<T>> {
     options.method == http.RequestMethod.GET
     return this.request<T>(url,options);
   }
 
-  post<T>(url:string,options:http.HttpRequestOptions = {}): Promise<HttpResp<T>> {
+  post<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions = this.baseOptions): Promise<HttpResp<T>> {
     options.method == http.RequestMethod.POST
     return this.request<T>(url,options);
   }
 
-  options<T>(): Promise<HttpResp<T>> {
+  options<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
-  head<T>(): Promise<HttpResp<T>> {
+  head<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
-  put<T>(): Promise<HttpResp<T>> {
+  put<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
-  delete<T>(): Promise<HttpResp<T>> {
+  delete<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
-  trace<T>(): Promise<HttpResp<T>> {
+  trace<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
-  connect<T>(): Promise<HttpResp<T>> {
+  connect<T = object | string | ArrayBuffer>(): Promise<HttpResp<T>> {
     throw new Error('Method not implemented.')
   }
 
@@ -248,7 +251,7 @@ export class HttpBase implements HttpFace,HttpConfigFace,HttpListener{
     return this.request<T>(url);
   }
 
-  upload<T>(url: string, options: http.HttpRequestOptions,
+  upload<T = object | string | ArrayBuffer>(url: string, options: http.HttpRequestOptions = this.baseOptions,
     onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined): Promise<HttpResp<T>> {
     this.contentType = "multipart/form-data";
     this.onDataReceiveProgress = onProgress

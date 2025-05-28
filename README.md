@@ -4,8 +4,8 @@
 Harmony OS network 鸿蒙网络库
 
 #### 软件架构
-系统封装后简介网络请求库，http，websocket。
 
+基于系统网络请求库，http，websocket 封装。
 
 #### 安装教程
 
@@ -15,9 +15,38 @@ Harmony OS network 鸿蒙网络库
 
 1、初始化
 ```
-dio.get("https://www.baidu.com");
-
-dio.post("https://www.baidu.com");
+/**
+ * GET请求
+ */
+Http.get("");
+/**
+ * POST请求
+ */
+Http.post("");
+/**
+ * 下载 GET请求
+ */
+Http.download("");
+/**
+ * 上传图片 POST请求
+ */
+Http.upImage("",{image:""});
+/**
+ * 上传多张图片 POST请求
+ */
+Http.upImages("",[{image:""}]);
+/**
+ * request请求 默认POST
+ */
+Http.request("");
+/**
+ * 多个requests异步请求 默认POST
+ */
+Http.requests({url:""});
+/**
+ * 多个requests同步请求 默认POST
+ */
+Http.requestsAsync({url:""});
 ```
 
 #### 参与贡献

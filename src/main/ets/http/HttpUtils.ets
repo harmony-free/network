@@ -19,7 +19,7 @@ export interface ImageParams{
 }
 
 
-interface HttpActionFace{
+export interface HttpActionFace{
 
   upFile<T>(url: string, dataList: Array<http.MultiFormData>,header:object|undefined,
     onProgress: ((obj: http.DataReceiveProgressInfo) => void) | undefined): Promise<HttpResp<T>>
@@ -40,19 +40,24 @@ export class HttpUtils extends HttpBase implements HttpActionFace{
 
 
 export class Http{
-  static post<T>(url:string,data:object): Promise<HttpResp<T>>{
-		return new HttpUtils().post<T>(url,{extraData:data});
+
+  static request<T = object | string | ArrayBuffer>(url:string,options?: http.HttpRequestOptions | undefined): Promise<HttpResp<T>>{
+    return new HttpUtils().request<T>(url,options);
+  }
+
+  static post<T = object | string | ArrayBuffer>(url:string,data?:object,header?:object): Promise<HttpResp<T>>{
+		return new HttpUtils().post<T>(url,{extraData:data,header:header});
 	}
 
-  static get<T>(url:string,data:object): Promise<HttpResp<T>>{
-    return new HttpUtils().get<T>(url,{extraData:data});
+  static get<T = object | string | ArrayBuffer>(url:string,data?:object,header?:object): Promise<HttpResp<T>>{
+    return new HttpUtils().get<T>(url,{extraData:data,header});
   }
 
   static download<T = ArrayBuffer>(url:string){
     return new HttpUtils().download<T>(url);
   }
 
-  static upImage<T>(url: string,params:ImageParams,onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined):Promise<HttpResp<T>>{
+  static upImage<T = object | string | ArrayBuffer>(url: string,params:ImageParams,onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined):Promise<HttpResp<T>>{
     let data:http.MultiFormData = {
       name: params.name ?? "",
       contentType: params.type ?? ImageEnum.PNG,
@@ -70,7 +75,7 @@ export class Http{
     return new HttpUtils().upFile<T>(url,[data],onProgress);
   }
 
-  static upImages<T>(url: string,params:Array<ImageParams>,onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined){
+  static upImages<T = object | string | ArrayBuffer>(url: string,params:Array<ImageParams>,onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined){
     let  dataList:Array<http.MultiFormData> = [];
     for (let index = 0; index < params.length; index++) {
       const param = params[index];
@@ -144,3 +149,4 @@ export class Http{
   }
 
 }
+

@@ -1,18 +1,18 @@
 import { webSocket } from '@kit.NetworkKit'
 import { BusinessError } from '@kit.BasicServicesKit'
 
-class OutValue extends Object {
+export class OutValue extends Object {
   status: number = 0
   message: string = ""
 }
 
-enum WebSocketStatus {
+export enum WebSocketStatus {
   normal,
   link,
   unLink,
 }
 
-interface WebSocketEvent {
+export interface WebSocketEvent {
 
   /**
    * 监听打开事件
@@ -53,7 +53,7 @@ interface WebSocketEvent {
   onHeaderReceive(data: object): void
 }
 
-interface WebSocketFace {
+export interface WebSocketFace {
   /**
    * socket 接口类
    */
@@ -170,7 +170,7 @@ export class WebSocketBase implements WebSocketFace, WebSocketEvent {
 }
 
 
-interface WebSocketUtilsFace extends WebSocketFace {
+export interface WebSocketUtilsFace extends WebSocketFace {
   /**
    * 重新连接
    * @param count 连接次数
