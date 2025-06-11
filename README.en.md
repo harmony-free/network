@@ -1,6 +1,6 @@
 # network
 
-#### Description
+#### Description [中文](README.md)
 Harmony OS network 
 
 #### Software Architecture

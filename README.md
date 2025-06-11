@@ -1,6 +1,6 @@
 # network
 
-#### 介绍
+#### 介绍 [English](README.en.md)
 Harmony OS network 鸿蒙网络库
 
 #### 软件架构
