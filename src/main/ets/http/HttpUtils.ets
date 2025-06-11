@@ -1,4 +1,4 @@
-import { HttpBase, HttpReq, HttpResp } from './HttpBase'
+import { HttpBase, HttpBaseParams, HttpReq, HttpResp } from './HttpBase'
 import { http } from '@kit.NetworkKit';
 import { buffer, url } from '@kit.ArkTS';
 
@@ -40,6 +40,10 @@ export class HttpUtils extends HttpBase implements HttpActionFace{
 
 
 export class Http{
+
+  static init(params?:HttpBaseParams):HttpUtils{
+    return new HttpUtils(params);
+  }
 
   static request<T = object | string | ArrayBuffer>(url:string,options?: http.HttpRequestOptions | undefined): Promise<HttpResp<T>>{
     return new HttpUtils().request<T>(url,options);
@@ -149,4 +153,5 @@ export class Http{
   }
 
 }
+
 

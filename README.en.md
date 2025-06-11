@@ -1,22 +1,53 @@
 # network
 
 #### Description
-Harmony OS network 鸿蒙网络库
+Harmony OS network 
 
 #### Software Architecture
-Software architecture description
+Based on the system network request library, including http and websocket encapsulation.
 
 #### Installation
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+`ohpm install @free/network`
 
 #### Instructions
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+
+1、Initialization
+```
+/**
+ * GET Request
+ */
+Http.get("");
+/**
+ * POST Request
+ */
+Http.post("");
+/**
+ * Download GET Request
+ */
+Http.download("");
+/**
+ * Upload pictures POST Request
+ */
+Http.upImage("",{image:""});
+/**
+ * Upload multiple pictures POST Request
+ */
+Http.upImages("",[{image:""}]);
+/**
+ * request Default POST
+ */
+Http.request("");
+/**
+ * more requests Asynchronous request Default POST
+ */
+Http.requests({url:""});
+/**
+ * more requests Synchronous request Default POST
+ */
+Http.requestsAsync({url:""});
+```
 
 #### Contribution
 

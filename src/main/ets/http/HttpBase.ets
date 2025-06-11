@@ -66,6 +66,7 @@ export interface HttpFace{
 
 
 export interface HttpConfigFace{
+
   baseUrl: string
 
   baseHeader: Map<string,ValueType>
@@ -83,6 +84,7 @@ export interface HttpConfigFace{
 }
 
 export interface HttpListener{
+
   onHeadersReceive: ((obj:object)=>void) | undefined
   offHeadersReceive: ((obj:object)=>void) | undefined
   onceHeadersReceive: ((obj:object)=>void) | undefined
@@ -105,13 +107,17 @@ export interface HttpListener{
 
 }
 
-interface HttpBaseParams{
-  baseUrl?:string,
-  baseHerder?:Map<string,ValueType>
-  changeResp?: ((resp:http.HttpResponse)=>http.HttpResponse)|undefined;
+export interface HttpBaseParams{
+
+  baseUrl?: string
+
+  baseHerder?: Map<string,ValueType>
+
+  changeResp?: ((resp:http.HttpResponse)=>http.HttpResponse)|undefined
+
 }
 
-export class HttpBase implements HttpFace,HttpConfigFace,HttpListener{
+export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
 
   static baseUrl:string = "";
 
@@ -248,7 +254,7 @@ export class HttpBase implements HttpFace,HttpConfigFace,HttpListener{
   download<T = ArrayBuffer>(url: string,onProgress?: ((obj: http.DataReceiveProgressInfo) => void) | undefined): Promise<HttpResp<T>> {
     this.onDataReceiveProgress = onProgress
     this.initListener()
-    return this.request<T>(url);
+    return this.request<T>(url,{extraData:ArrayBuffer});
   }
 
   upload<T = object | string | ArrayBuffer>(url: string, options: http.HttpRequestOptions = this.baseOptions,
