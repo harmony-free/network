@@ -79,6 +79,8 @@ export interface HttpConfigFace{
 
   readTimeout: number
 
+  changeReq: ((resp:http.HttpRequestOptions)=>http.HttpRequestOptions) | undefined;
+
   changeResp: ((resp:http.HttpResponse)=>http.HttpResponse) | undefined;
 
 }
@@ -113,6 +115,8 @@ export interface HttpBaseParams{
 
   baseHerder?: Map<string,ValueType>
 
+  changeReq?: ((resp:http.HttpRequestOptions)=>http.HttpRequestOptions)|undefined
+
   changeResp?: ((resp:http.HttpResponse)=>http.HttpResponse)|undefined
 
 }
@@ -123,11 +127,14 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
 
   static baseHeader:Map<string,ValueType> = new Map<string,ValueType>([["Content-Type","application/json"]])
 
+  static changeReq: ((resp:http.HttpRequestOptions)=>http.HttpRequestOptions)|undefined;
+
   static changeResp: ((resp:http.HttpResponse)=>http.HttpResponse)|undefined;
 
   constructor(params?:HttpBaseParams) {
     this.baseUrl = params?.baseUrl ?? HttpBase.baseUrl
     this.baseHeader = params?.baseHerder ?? HttpBase.baseHeader
+    this.changeReq = params?.changeReq ?? HttpBase.changeReq
     this.changeResp = params?.changeResp ?? HttpBase.changeResp
   }
 
@@ -186,6 +193,7 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
   connectTimeout: number = 6000
   readTimeout: number = 6000
   httpRequest: http.HttpRequest = http.createHttp()
+  changeReq: ((req:http.HttpRequestOptions)=>http.HttpRequestOptions) | undefined;
   changeResp: ((resp:http.HttpResponse)=>http.HttpResponse) | undefined;
   baseOptions:http.HttpRequestOptions = {
     connectTimeout: this.connectTimeout,
@@ -196,6 +204,9 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
   request<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions = this.baseOptions): Promise<HttpResp<T>> {
     this.baseHeader.set("Content-Type",this.contentType);
     options.header = assign({},this.baseHeader,options.header??{})
+    if (this.changeReq != undefined) {
+      options = this.changeReq(options);
+    }
     return new Promise((res,rej)=>{
       this.httpRequest.request(url,options,(err,data)=>{
         if (err) {
@@ -204,13 +215,17 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
           if (this.changeResp != undefined) {
             data = this.changeResp(data);
           }
-          let resp:HttpResp<T> = {
-            responseCode: data.responseCode,
-            code: data.responseCode,
-            msg: "请求成功",
-            data: data.result as T,
+          if (data.responseCode == 200) {
+            let resp:HttpResp<T> = {
+              responseCode: data.responseCode,
+              code: data.responseCode,
+              msg: "请求成功",
+              data: data.result as T,
+            }
+            res(resp)
+          }else{
+            rej(JSON.stringify(data.result))
           }
-          res(resp)
         }
         this.finish()
       })
@@ -270,6 +285,11 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
   }
 
   clean(){
+    this.clearListener()
+    this.httpRequest.destroy();
+  }
+
+  cancel(){
     this.clearListener()
     this.httpRequest.destroy();
   }

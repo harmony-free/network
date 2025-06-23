@@ -1,9 +1,23 @@
 {
   "name": "@free/network",
   "version": "1.0.0",
-  "description": "Please describe the basic information.",
+  "description": "harmony os 基于系统网络请求库，http，websocket 封装。",
+  "keywords": [
+    "get",
+    "post",
+    "download",
+    "upImage",
+    "request",
+    "requests",
+    "requestsAsync"
+  ],
   "main": "Index.ets",
-  "author": "",
-  "license": "Apache-2.0",
+  "author": {
+    "name": "余邦锦",
+    "email": "15179861454@163.com"
+  },
+  "homepage": "https://gitee.com/harmony-free",
+  "repository": "https://gitee.com/harmony-free/network",
+  "license": "MIT",
   "dependencies": {}
 }

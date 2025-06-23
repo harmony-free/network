@@ -1,6 +1,6 @@
 import { HttpBase, HttpBaseParams, HttpReq, HttpResp } from './HttpBase'
 import { http } from '@kit.NetworkKit';
-import { buffer, url } from '@kit.ArkTS';
+import { buffer, List, url } from '@kit.ArkTS';
 
 // 应用通过HTTP发起一个数据请求，支持常见的GET、POST、OPTIONS、HEAD、PUT、DELETE、TRACE、CONNECT方法。
 
@@ -153,5 +153,4 @@ export class Http{
   }
 
 }
-
 
