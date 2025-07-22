@@ -197,16 +197,17 @@ export class HttpBase implements HttpFace, HttpConfigFace, HttpListener{
   changeResp: ((resp:http.HttpResponse)=>http.HttpResponse) | undefined;
   baseOptions:http.HttpRequestOptions = {
     connectTimeout: this.connectTimeout,
-    method: this.method,
     readTimeout: this.readTimeout
   }
 
   request<T = object | string | ArrayBuffer>(url:string,options:http.HttpRequestOptions = this.baseOptions): Promise<HttpResp<T>> {
     this.baseHeader.set("Content-Type",this.contentType);
     options.header = assign({},this.baseHeader,options.header??{})
+    options = assign({},this.baseOptions,options)
     if (this.changeReq != undefined) {
       options = this.changeReq(options);
     }
+    console.info("options:",JSON.stringify(options));
     return new Promise((res,rej)=>{
       this.httpRequest.request(url,options,(err,data)=>{
         if (err) {
